@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (must already exist)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # Debug signing keeps the APK installable straight from the release page.
+      # Swap this for assembleRelease once a signing keystore lives in secrets.
+      - name: Build APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Name the APK after the tag
+        run: |
+          tag="${{ inputs.tag || github.ref_name }}"
+          mv app/build/outputs/apk/debug/app-debug.apk "screen-cast-${tag}.apk"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="${{ inputs.tag || github.ref_name }}"
+          gh release create "$tag" "screen-cast-${tag}.apk" \
+            --title "Screen Cast $tag" \
+            --generate-notes \
+            --verify-tag
