@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="surface">#F4F6FC</color>
+    <color name="card">#FFFFFFFF</color>
+    <color name="primary">#2855D9</color>
+    <color name="primary_dark">#1B3AA0</color>
+    <color name="primary_light">#EAEFFF</color>
+    <color name="accent">#00C2A8</color>
+    <color name="accent_light">#E0F8F4</color>
+    <color name="on_primary">#FFFFFFFF</color>
+    <color name="ink">#171A25</color>
+    <color name="muted">#5D6474</color>
+    <color name="hairline">#E4E8F2</color>
+    <color name="scrim_light">#33FFFFFF</color>
+</resources>

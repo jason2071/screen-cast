@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Screen Cast</string>
+    <string name="cast_settings_unavailable">อุปกรณ์นี้ไม่มีหน้าจอ Miracast ที่แอปเรียกใช้ได้ กำลังเปิดการตั้งค่าระบบแทน</string>
+    <string name="invalid_media_url">โปรดใส่ลิงก์วิดีโอ http หรือ https ที่ถูกต้อง</string>
+    <string name="connect_google_cast_first">โปรดเลือกและเชื่อมต่อ Chromecast/Google TV ก่อน</string>
+    <string name="media_title">วิดีโอจาก Screen Cast</string>
+
+    <string name="header_badge">แคสต์ไร้สาย</string>
+    <string name="header_title">Screen Cast</string>
+    <string name="header_subtitle">ส่งหน้าจอหรือวิดีโอจากมือถือขึ้นทีวี ในแอปเดียว</string>
+
+    <string name="mirror_title">สะท้อนทั้งหน้าจอ</string>
+    <string name="mirror_tag">Miracast</string>
+    <string name="mirror_body">เปิด Screen Mirroring หรือ Miracast บนทีวีก่อน แล้วเลือกชื่อทีวีในหน้าจอ Cast ของ Android</string>
+    <string name="mirror_action">เลือกทีวีและเริ่มแคสต์</string>
+
+    <string name="cast_title">ส่งวิดีโอไปทีวี</string>
+    <string name="cast_tag">Google Cast</string>
+    <string name="cast_body">แตะไอคอน Cast มุมขวาเพื่อเลือก Chromecast หรือ Google TV แล้ววางลิงก์วิดีโอ MP4, HLS หรือ DASH ที่ทีวีเข้าถึงได้</string>
+    <string name="cast_url_label">ลิงก์วิดีโอ</string>
+    <string name="cast_url_hint">https://example.com/video.mp4</string>
+    <string name="cast_action">ส่งวิดีโอไปทีวี</string>
+    <string name="cast_button_description">เลือกอุปกรณ์ Google Cast</string>
+
+    <string name="local_divider">หรือเล่นวิดีโอที่มีในเครื่อง</string>
+    <string name="local_body">แอปจะเปิดเซิร์ฟเวอร์ชั่วคราวบน Wi‑Fi ให้ทีวีดึงไฟล์ไปเล่น ต้องเปิดแอปค้างไว้ระหว่างเล่น</string>
+    <string name="local_pick">เลือกวิดีโอในเครื่อง</string>
+    <string name="local_cast">ส่งไฟล์ที่เลือกไปทีวี</string>
+    <string name="local_video_selected">เลือกวิดีโอแล้ว</string>
+    <string name="local_serving">กำลังส่งไฟล์ให้ทีวี — อย่าปิดแอป</string>
+    <string name="pick_video_first">โปรดเลือกวิดีโอในเครื่องก่อน</string>
+    <string name="wifi_required">ต้องต่อ Wi‑Fi วงเดียวกับทีวีก่อน จึงจะส่งไฟล์ในเครื่องได้</string>
+    <string name="local_serve_failed">เปิดไฟล์นี้ไม่ได้ ลองเลือกไฟล์อื่น</string>
+
+    <string name="steps_title">ก่อนเริ่ม</string>
+    <string name="step_1">เปิด Wi‑Fi ทั้งมือถือและทีวี ให้อยู่วงเดียวกัน</string>
+    <string name="step_2">เปิด Screen Mirroring / Miracast บนทีวี</string>
+    <string name="step_3">แตะปุ่มด้านบน แล้วเลือกชื่อทีวี</string>
+    <string name="step_4">ยืนยันการเชื่อมต่อบนทีวี หากมีข้อความถาม</string>
+
+    <string name="footnote">Miracast เป็นความสามารถระดับระบบของ Android ความพร้อมใช้งานและชื่อเมนูอาจต่างกันตามรุ่นโทรศัพท์และผู้ผลิตทีวี</string>
+</resources>
