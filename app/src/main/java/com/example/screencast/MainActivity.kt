@@ -1,18 +1,24 @@
 package com.example.screencast
 
+import android.Manifest
 import android.content.ActivityNotFoundException
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.view.View
-import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.MediaInfo
@@ -24,10 +30,20 @@ import com.google.android.material.button.MaterialButton
 
 class MainActivity : FragmentActivity() {
     private lateinit var castContext: CastContext
-    private lateinit var mediaServer: LocalMediaServer
 
+    private var mediaServer: MediaServerService? = null
     private var pickedVideo: Uri? = null
     private var pickedName: String? = null
+
+    private val serverConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
+            mediaServer = (binder as? MediaServerService.LocalBinder)?.service
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            mediaServer = null
+        }
+    }
 
     private val pickVideo = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri == null) return@registerForActivityResult
@@ -36,21 +52,30 @@ class MainActivity : FragmentActivity() {
         showPickedVideo()
     }
 
+    private val requestNotifications =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { /* optional */ }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         castContext = CastContext.getSharedInstance(this)
-        mediaServer = LocalMediaServer(contentResolver)
         CastButtonFactory.setUpMediaRouteButton(
             applicationContext,
             findViewById<MediaRouteButton>(R.id.google_cast_button)
         )
+
+        bindService(
+            Intent(this, MediaServerService::class.java),
+            serverConnection,
+            Context.BIND_AUTO_CREATE
+        )
     }
 
     override fun onDestroy() {
-        // The receiver streams from us, so the server can only live as long as the activity.
-        mediaServer.close()
+        // Unbind only. Once started in the foreground the service outlives this activity, which is
+        // what lets the screen turn off without cutting the stream.
+        unbindService(serverConnection)
         super.onDestroy()
     }
 
@@ -93,22 +118,26 @@ class MainActivity : FragmentActivity() {
             return
         }
 
+        val server = mediaServer ?: run {
+            Toast.makeText(this, R.string.server_not_ready, Toast.LENGTH_LONG).show()
+            return
+        }
+
         if (LocalMediaServer.wifiAddress() == null) {
             Toast.makeText(this, R.string.wifi_required, Toast.LENGTH_LONG).show()
             return
         }
 
-        val url = mediaServer.publish(uri) ?: run {
+        val url = server.publish(uri) ?: run {
             Toast.makeText(this, R.string.local_serve_failed, Toast.LENGTH_LONG).show()
             return
         }
 
-        val casting = load(url, contentResolver.getType(uri) ?: "video/mp4", pickedName.orEmpty())
-        if (casting) {
-            // Killing the activity stops the server mid-stream, so keep the screen on while serving.
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            findViewById<TextView>(R.id.local_video_name).setText(R.string.local_serving)
-        }
+        if (!load(url, contentResolver.getType(uri) ?: "video/mp4", pickedName.orEmpty())) return
+
+        askForNotifications()
+        ContextCompat.startForegroundService(this, MediaServerService.startIntent(this, pickedName))
+        findViewById<TextView>(R.id.local_video_name).setText(R.string.local_serving)
     }
 
     /** Sends [url] to the connected receiver. Returns false when no session is connected. */
@@ -133,6 +162,15 @@ class MainActivity : FragmentActivity() {
 
         remoteMediaClient.load(MediaLoadRequestData.Builder().setMediaInfo(mediaInfo).build())
         return true
+    }
+
+    /** The stop control lives in the notification, so ask before the service posts it. */
+    private fun askForNotifications() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        val granted = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+        if (granted != PackageManager.PERMISSION_GRANTED) {
+            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 
     private fun showPickedVideo() {

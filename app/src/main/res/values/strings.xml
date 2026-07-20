@@ -24,11 +24,15 @@
     <string name="cast_button_description">เลือกอุปกรณ์ Google Cast</string>
 
     <string name="local_divider">หรือเล่นวิดีโอที่มีในเครื่อง</string>
-    <string name="local_body">แอปจะเปิดเซิร์ฟเวอร์ชั่วคราวบน Wi‑Fi ให้ทีวีดึงไฟล์ไปเล่น ต้องเปิดแอปค้างไว้ระหว่างเล่น</string>
+    <string name="local_body">แอปจะเปิดเซิร์ฟเวอร์ชั่วคราวบน Wi‑Fi ให้ทีวีดึงไฟล์ไปเล่น ระหว่างเล่นปิดหน้าจอได้ หยุดได้จากแถบแจ้งเตือน</string>
     <string name="local_pick">เลือกวิดีโอในเครื่อง</string>
     <string name="local_cast">ส่งไฟล์ที่เลือกไปทีวี</string>
     <string name="local_video_selected">เลือกวิดีโอแล้ว</string>
-    <string name="local_serving">กำลังส่งไฟล์ให้ทีวี — อย่าปิดแอป</string>
+    <string name="local_serving">กำลังส่งไฟล์ให้ทีวี — ปิดหน้าจอได้</string>
+    <string name="server_not_ready">ยังเตรียมเซิร์ฟเวอร์ไม่เสร็จ ลองอีกครั้ง</string>
+    <string name="serving_channel">การส่งไฟล์ไปทีวี</string>
+    <string name="serving_notification_title">กำลังส่งวิดีโอไปทีวี</string>
+    <string name="serving_stop">หยุด</string>
     <string name="pick_video_first">โปรดเลือกวิดีโอในเครื่องก่อน</string>
     <string name="wifi_required">ต้องต่อ Wi‑Fi วงเดียวกับทีวีก่อน จึงจะส่งไฟล์ในเครื่องได้</string>
     <string name="local_serve_failed">เปิดไฟล์นี้ไม่ได้ ลองเลือกไฟล์อื่น</string>
